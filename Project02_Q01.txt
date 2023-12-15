@@ -1,0 +1,89 @@
+def rndmboard():  # A function to fill the board randomly (hidden behind stars)
+    import random as rand
+    cards = [1,2,3,4,5,6,7,8]*2
+    B = [[],[],[],[]]
+    rand.shuffle(cards)
+    for r in range(0,16,4):
+        row = r//4
+        for i in cards[r:r+4]:
+            B[row].append(i)           
+    return B
+
+def stars():   # A function to create a 4x4 list of stars
+    B = []
+    for row in range(4):
+        L = []
+        for col in range(4):
+            L.append('*')
+        B.append(L)
+    return B
+        
+def showboard(S):  # A function to show the board
+    for row in range(4):
+        for col in range(4):
+            print(S[row][col], end=' ')
+        print()
+
+            
+    
+def cardloc():   # A function to get the card location
+    r = input('Enter the row (1 to 4) and col (1 to 4) position of the pair: ')
+    print()
+    r = r.split()
+    while len(r) != 2:
+        print('Enter only 2 numbers.\n')
+        r = cardloc()
+    for i in range(len(r)):
+        r[i] = int(r[i])
+        while r[i] < 1 or r[i] > 4:
+            print('Invalid position.\n')
+            r = cardloc()
+    return r
+        
+
+def game(r,s):   # A function to play the game
+    pair = 0
+    showboard(s)
+    while pair < 8:
+        
+        c1 = cardloc()
+        a = c1[0] - 1
+        b = c1[1] - 1
+        while s[a][b] != '*':
+            print('Card at this position already faced up. Select position again.\n')
+            c1 = cardloc()
+            a = c1[0] - 1
+            b = c1[1] - 1
+        s[a][b] = r[a][b]
+        showboard(s) 
+
+        c2 = cardloc()
+        d = c2[0] - 1
+        e = c2[1] - 1
+        while s[d][e] != '*':
+            print('Card at this position already faced up. Select position again.\n')
+            c2 = cardloc()
+            d = c2[0] - 1
+            e = c2[1] - 1
+        s[d][e] = r[d][e]
+        showboard(s)
+        
+        if s[a][b] != s[d][e]:
+            print('Pair do not match. Select again!\n')
+            s[a][b] = '*'
+            s[d][e] = '*'
+            showboard(s)
+            
+        if r[a][b] == r[d][e]:
+            print('Pair match!\n')
+            showboard(s)
+            pair += 1        
+        
+        
+        
+def main():   #calls all the function
+    a = rndmboard()
+    b = stars()
+    game(a,b)
+    print('\nEnter any key to continue...')
+main()
